@@ -489,7 +489,11 @@ a:hover {
 
     .mobile-menu-btn {
         order: 2;
-        padding: 0.25rem;
+        padding: 0.5rem;
+        min-width: 44px;
+        min-height: 44px;
+        position: relative;
+        z-index: 1001;
     }
 
     .mobile-menu-btn span {

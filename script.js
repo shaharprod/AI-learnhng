@@ -13,17 +13,28 @@
     });
 })();
 
-// Mobile Menu Toggle – רץ אחרי טעינת DOM
+// Mobile Menu Toggle – רץ אחרי טעינת DOM, תומך במגע (touch)
 function initMobileMenu() {
     var mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     var navLinks = document.querySelector('.nav-links');
     if (!mobileMenuBtn || !navLinks) return;
 
-    mobileMenuBtn.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
+    function toggleMenu(e) {
+        if (e) { e.preventDefault(); e.stopPropagation(); }
         navLinks.classList.toggle('active');
         mobileMenuBtn.classList.toggle('active');
+    }
+
+    var skipNextClick = false;
+    mobileMenuBtn.addEventListener('touchend', function (e) {
+        toggleMenu(e);
+        skipNextClick = true;
+        e.preventDefault();
+    }, { passive: false });
+
+    mobileMenuBtn.addEventListener('click', function (e) {
+        if (skipNextClick) { skipNextClick = false; e.preventDefault(); return; }
+        toggleMenu(e);
     });
 
     document.querySelectorAll('.nav-links a').forEach(function (link) {

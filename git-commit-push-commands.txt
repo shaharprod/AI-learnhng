@@ -1,0 +1,18 @@
+# פקודות Git לקומיט ופוש – להריץ מתוך תיקיית הפרויקט
+
+## PowerShell:
+cd "c:\Users\User\Downloads\אתר בינה מלאכותית ללימוד"
+git add -A
+git commit -m "fix: תפריט המבורגר בנייד + כפתור בכל הדפים"
+git push
+
+## CMD:
+cd /d "c:\Users\User\Downloads\אתר בינה מלאכותית ללימוד"
+git add -A
+git commit -m "fix: תפריט המבורגר בנייד + כפתור בכל הדפים"
+git push
+
+## שימוש בסקריפטים הקיימים:
+.\git-commit-push.bat "fix: תפריט המבורגר בנייד"
+# או
+.\git-commit-push.ps1 "fix: תפריט המבורגר בנייד"
