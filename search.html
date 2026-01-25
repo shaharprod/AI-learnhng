@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>חיפוש באתר | AI ללימוד</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        .search-page { padding: 6rem 0 4rem; }
+        .search-page h1 { margin-bottom: 1rem; text-align: center; }
+        .search-form-wrap { max-width: 500px; margin: 0 auto 2rem; }
+        .search-form-wrap input { width: 100%; padding: 0.75rem 1rem; font-size: 1.1rem; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+        .search-form-wrap input:focus { outline: none; border-color: var(--primary); }
+        .search-results { max-width: 700px; margin: 0 auto; }
+        .search-results .result-item { margin-bottom: 1.5rem; padding: 1rem; background: var(--surface); border-radius: var(--radius-sm); border-right: 4px solid var(--primary); }
+        .search-results .result-item h3 { margin-bottom: 0.35rem; font-size: 1.1rem; }
+        .search-results .result-item h3 a { color: var(--primary); }
+        .search-results .result-item .snippet { color: var(--text-light); font-size: 0.95rem; line-height: 1.6; }
+        .search-results .result-item .snippet strong { background: rgba(37,99,235,0.15); padding: 0 2px; }
+        .search-results .no-results { text-align: center; color: var(--text-light); padding: 2rem; }
+        .search-results .loading { text-align: center; padding: 2rem; color: var(--text-light); }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <a href="index.html">
+                    <span class="logo-icon">🤖</span>
+                    <span class="logo-text">AI ללימוד</span>
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">בית</a></li>
+                <li><a href="index.html#intro">מה זה AI?</a></li>
+                <li class="dropdown">
+                    <a href="index.html#topics" class="dropdown-toggle">שיעורים ▾</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="pages/intro-to-ai.html">1. מבוא ל-AI</a></li>
+                        <li><a href="pages/machine-learning.html">2. למידת מכונה</a></li>
+                        <li><a href="pages/ai-daily-life.html">3. AI בחיי היומיום</a></li>
+                        <li><a href="pages/ai-tools.html">4. כלים מעשיים</a></li>
+                        <li><a href="pages/prompt-engineering.html">5. הנדסת הנחייה</a></li>
+                        <li><a href="pages/ai-ethics.html">6. אתיקה ב-AI</a></li>
+                        <li><a href="pages/ai-future.html">7. העתיד של AI</a></li>
+                    </ul>
+                </li>
+                <li><a href="index.html#tools">כלים</a></li>
+                <li><a href="index.html#about">אודות</a></li>
+            </ul>
+            <form class="nav-search" id="site-search" role="search">
+                <input type="search" name="q" placeholder="חיפוש מילים ומושגים..." aria-label="חיפוש באתר" />
+                <button type="submit" aria-label="חפש">🔍</button>
+            </form>
+        </nav>
+    </header>
+
+    <main class="section search-page">
+        <div class="container">
+            <h1>חיפוש מילים ומושגים באתר</h1>
+            <div class="search-form-wrap">
+                <form id="search-form" role="search">
+                    <input type="search" name="q" id="search-query" placeholder="הקלידו מילה או מושג..." aria-label="חיפוש" autofocus />
+                </form>
+            </div>
+            <div id="search-results" class="search-results"></div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 AI ללימוד - כל הזכויות שמורות לשמוליק שחר יועץ לימודי המנגיש לימודי בינה מלאכותית לכל אדם</p>
+            <p class="footer-contact">טלפון: <a href="tel:+972522603831">+972522603831</a> | אימייל: <a href="mailto:shaharprod@gmail.com">shaharprod@gmail.com</a></p>
+        </div>
+    </footer>
+
+    <script>
+(function () {
+    var PAGES = [
+        { url: 'index.html', title: 'דף הבית' },
+        { url: 'pages/intro-to-ai.html', title: 'מבוא ל-AI' },
+        { url: 'pages/machine-learning.html', title: 'למידת מכונה' },
+        { url: 'pages/ai-daily-life.html', title: 'AI בחיי היומיום' },
+        { url: 'pages/ai-tools.html', title: 'כלים מעשיים' },
+        { url: 'pages/prompt-engineering.html', title: 'הנדסת הנחייה' },
+        { url: 'pages/ai-ethics.html', title: 'אתיקה ב-AI' },
+        { url: 'pages/ai-future.html', title: 'העתיד של AI' }
+    ];
+    var resultsEl = document.getElementById('search-results');
+    var form = document.getElementById('search-form');
+    var input = document.getElementById('search-query');
+
+    function getQuery() {
+        var params = new URLSearchParams(window.location.search);
+        return (params.get('q') || '').trim();
+    }
+
+    function setQuery(q) {
+        if (input) input.value = q;
+    }
+
+    function highlight(snippet, term) {
+        if (!term) return snippet;
+        var r = new RegExp('(' + term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+        return snippet.replace(r, '<strong>$1</strong>');
+    }
+
+    function snippetAround(text, index, termLen, chars) {
+        var start = Math.max(0, index - chars);
+        var end = Math.min(text.length, index + termLen + chars);
+        var s = text.slice(start, end);
+        if (start > 0) s = '…' + s;
+        if (end < text.length) s = s + '…';
+        return s.replace(/\s+/g, ' ').trim();
+    }
+
+    function runSearch(q) {
+        if (!q) {
+            resultsEl.innerHTML = '<p class="no-results">הזינו מילה או מושג לחיפוש.</p>';
+            return;
+        }
+        resultsEl.innerHTML = '<p class="loading">מחפש...</p>';
+        setQuery(q);
+
+        var found = [];
+        var lower = q.toLowerCase();
+        var maxTotal = 25;
+        var maxPerPage = 4;
+        var promises = PAGES.map(function (p) {
+            return fetch(p.url).then(function (r) { return r.text(); }).then(function (html) {
+                var parser = new DOMParser();
+                var doc = parser.parseFromString(html, 'text/html');
+                [].forEach.call(doc.querySelectorAll('script, style, noscript'), function (el) { el.remove(); });
+                var text = (doc.body && doc.body.innerText) ? doc.body.innerText : '';
+                var pos = 0, count = 0;
+                while (found.length < maxTotal && count < maxPerPage) {
+                    var i = text.toLowerCase().indexOf(lower, pos);
+                    if (i === -1) break;
+                    found.push({
+                        title: p.title,
+                        url: p.url,
+                        snippet: snippetAround(text, i, q.length, 80)
+                    });
+                    count++;
+                    pos = i + 1;
+                }
+            }).catch(function () {});
+        });
+
+        Promise.all(promises).then(function () {
+            if (found.length === 0) {
+                resultsEl.innerHTML = '<p class="no-results">לא נמצאו תוצאות עבור „' + q + '".</p>';
+                return;
+            }
+            var html = '';
+            found.forEach(function (r) {
+                html += '<div class="result-item"><h3><a href="' + r.url + '">' + r.title + '</a></h3><p class="snippet">' + highlight(r.snippet, q) + '</p></div>';
+            });
+            resultsEl.innerHTML = html;
+        });
+    }
+
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            var q = (input && input.value) ? input.value.trim() : '';
+            if (q) window.location.href = 'search.html?q=' + encodeURIComponent(q);
+            return false;
+        });
+    }
+    setQuery(getQuery());
+    runSearch(getQuery());
+})();
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

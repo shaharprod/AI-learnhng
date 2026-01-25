@@ -27,7 +27,7 @@ jobs:
       - name: Prepare site folder
         run: |
           mkdir -p _site
-          cp index.html style.css script.js _site/ 2>/dev/null || true
+          cp index.html search.html style.css script.js _site/ 2>/dev/null || true
           cp -r pages _site/
           touch _site/.nojekyll
 

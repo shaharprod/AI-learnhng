@@ -1,3 +1,18 @@
+// Site search form – redirect to search page with query
+(function () {
+    var form = document.getElementById('site-search');
+    if (!form) return;
+    var base = (window.location.href.indexOf('/pages/') !== -1) ? '../' : '';
+    form.action = base + 'search.html';
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var q = (form.querySelector('[name=q]') || {}).value;
+        if (!q || !String(q).trim()) return false;
+        window.location.href = form.action + '?q=' + encodeURIComponent(String(q).trim());
+        return false;
+    });
+})();
+
 // Mobile Menu Toggle
 const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
 const navLinks = document.querySelector('.nav-links');
