@@ -487,37 +487,24 @@ a:hover {
         height: 20px;
     }
 
+    /* מובייל: תפריט רגיל תמיד גלוי (בלי המבורגר) – עובד בכל מכשיר */
     .mobile-menu-btn {
-        order: 2;
-        padding: 0.5rem;
-        min-width: 44px;
-        min-height: 44px;
-        position: relative;
-        z-index: 1001;
-    }
-
-    .mobile-menu-btn span {
-        width: 18px;
-        height: 2px;
+        display: none !important;
     }
 
     .nav-links {
         order: 4;
-        display: none;
-        position: fixed;
-        top: 4.5rem;
-        right: 0;
-        left: 0;
-        width: 100%;
-        max-height: calc(100vh - 4.5rem);
+        display: flex;
         flex-direction: column;
+        width: 100%;
+        flex: 1 1 100%;
+        position: static;
         background: var(--background);
         padding: 0.35rem 0;
         gap: 0;
-        box-shadow: var(--shadow);
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        z-index: 999;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        border-radius: var(--radius-sm);
+        margin-top: 0.25rem;
     }
 
     .nav-links.active {
@@ -528,16 +515,15 @@ a:hover {
         border-bottom: 1px solid var(--border);
     }
 
-    .nav-links > li > a {
-        display: block;
-        padding: 0.35rem 0.6rem;
-        font-size: 0.85rem;
-        white-space: normal;
+    .nav-links li:last-child {
+        border-bottom: none;
     }
 
-    .mobile-menu-btn {
-        display: flex;
-        flex-shrink: 0;
+    .nav-links > li > a {
+        display: block;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+        white-space: normal;
     }
 
     .nav-search {

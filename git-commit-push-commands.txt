@@ -1,6 +1,6 @@
-# פקודות Git – קומיט ופוש (הרצה מתוך תיקיית הפרויקט)
+# פקודות Git – קומיט ופוש רגיל (הרצה מתוך תיקיית הפרויקט)
 
 cd "c:\Users\User\Downloads\אתר בינה מלאכותית ללימוד"
 git add -A
-git commit -m "fix: תפריט המבורגר במובייל - position fixed ו-z-index כדי שייראה ולא ייחסם"
+git commit -m "רגיל"
 git push
