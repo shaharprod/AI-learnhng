@@ -13,24 +13,31 @@
     });
 })();
 
-// Mobile Menu Toggle
-const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-const navLinks = document.querySelector('.nav-links');
+// Mobile Menu Toggle – רץ אחרי טעינת DOM
+function initMobileMenu() {
+    var mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    var navLinks = document.querySelector('.nav-links');
+    if (!mobileMenuBtn || !navLinks) return;
 
-if (mobileMenuBtn) {
-    mobileMenuBtn.addEventListener('click', () => {
+    mobileMenuBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
         navLinks.classList.toggle('active');
         mobileMenuBtn.classList.toggle('active');
     });
-}
 
-// Close mobile menu when clicking a link
-document.querySelectorAll('.nav-links a').forEach(link => {
-    link.addEventListener('click', () => {
-        navLinks.classList.remove('active');
-        mobileMenuBtn.classList.remove('active');
+    document.querySelectorAll('.nav-links a').forEach(function (link) {
+        link.addEventListener('click', function () {
+            navLinks.classList.remove('active');
+            mobileMenuBtn.classList.remove('active');
+        });
     });
-});
+}
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMobileMenu);
+} else {
+    initMobileMenu();
+}
 
 // Smooth scroll for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
